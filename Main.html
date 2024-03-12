@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Maciek item register</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Koulen&family=Lato&family=Nunito&family=Playfair+Display:ital@1&family=Prata&family=Raleway:ital,wght@1,100&family=Roboto&family=Roboto+Condensed&family=Teko&display=swap');
+
+        .table_header{
+            background: rgba(73, 51, 170, 0.4);
+            border-radius: 6px;
+        }
+        th{
+            /*border:solid black 1px;*/
+            border-radius: 6px;
+        }
+
+        td:not(:last-child){
+            border: 0;
+            background: rgba(100, 100, 100, 0.22);
+        }
+
+
+        .animated_text {
+            /*font-size:70px;*/
+            background-image:
+                    linear-gradient(to right, #f6f6f6, #68bcff, #7359bb, #862eee,blue,indigo,violet);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: move 280s linear infinite;
+        }
+        @keyframes move {
+            to {
+                background-position: 4500vh;
+            }
+        }
+
+        .upload_file_button{
+            position: fixed;
+            top:10%;
+            left: 2%;
+        }
+
+        .cart_file_button{
+            position: fixed;
+            top:7%;
+            right: 2%;
+        }
+
+        .packages_button{
+            position: fixed;
+            top:16%;
+            right: 2%;
+        }
+
+        .title{
+            text-align: center;
+        }
+        body {
+            background-color: #191919;
+            opacity: 0.8;
+            background-image:  repeating-radial-gradient( circle at 0 0, transparent 0, #191919 33px ), repeating-linear-gradient( #24242455, #242424 );
+            min-height: 90vh;
+        }
+
+        body{
+            color: antiquewhite;
+        }
+
+        h1{
+          font-size: 4rem;
+            transition: 1s;
+        }
+
+        h1:hover{
+            letter-spacing: 1.2vh;
+
+        }
+        table{
+            width: 90%;
+            align-content: center;
+            align-items: center;
+            text-align: center;
+            margin-left: 5%    ;
+            margin-right: 5%;
+        }
+
+
+        .color_btn{
+
+            font-family: Roboto, sans-serif;
+            font-weight: 0;
+            font-size: 14px;
+            color: #fff;
+            background: linear-gradient(90deg, #0066CC 0%, #c500cc 100%);
+            padding: 10px 30px;
+            border: 2px solid #0066cc;
+            box-shadow: rgb(0, 0, 0) 0px 0px 0px 0px;
+            border-radius: 50px;
+            transform: translateY(0);
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            cursor: pointer;
+            transition: 10s linear;
+        }
+
+        .color_btn:hover{
+
+            /*padding: 10px 40px;*/
+
+            transform : translateY(-0px);
+            /*background: linear-gradient(90deg, #c500cc 0%, #0066cc 100%); */
+            color: #e1e1e1;
+            border: solid 2px #0066cc;
+            background-position:1000px;
+            animation: loop_button_background 3s infinite ease-in-out;
+        }
+
+        @keyframes loop_button_background{
+            0%{background-position-x:0}
+            50%{background-position-x: 250px}
+            100%{background-position-x:0}
+        }
+
+
+
+
+        .side_menu_hide{
+            width:0;
+            transition: 1s;
+            position: absolute;
+            z-index: 100;
+            top:0;
+            height: 100vh;
+            right: 0;
+            background: dimgray;
+            align-content: center;
+            align-items: center;
+            text-align: center;
+
+        }
+
+        .side_menu_hide *{
+
+            animation: fadeaway 1s ;
+
+        }
+
+        .side_menu_show *{
+            animation: fadein 1s;
+
+        }
+
+        @keyframes fadeaway{
+            from{opacity: 100%}
+            to{opacity: 0}
+        }
+
+        @keyframes fadein{
+            from{opacity: 0}
+            to{opacity: 100%}
+        }
+        /*side_menu_show *{*/
+        /*    width:*/
+        /*}*/
+
+        .side_menu_show{
+
+            -moz-border-radius-bottomleft: 10px;
+            -moz-border-radius-topleft: 10px;
+            transition: 1s;
+            position: fixed;
+            z-index: 100;
+            width: 30%;
+            top:0;
+            height: 100vh;
+            right: 0;
+            background: rgba(61, 59, 70, 0.95);
+            align-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        .cart_table{
+            top:10%;
+            position: absolute;
+        }
+
+        .centered{
+
+        }
+
+        .centerme{
+            margin-right: auto;
+            margin-left: auto;
+        }
+
+
+        .info{
+            width:30%;
+            margin-left:35%;
+            margin-right:35%;
+            margin-bottom:20px;
+            color:white;
+            padding:20px;
+            position:absolute;
+            border-radius: 5px;
+            bottom:3%;
+            opacity:0;
+            background: linear-gradient(45deg, #0066CC 0%, #c500cc 80%);
+            animation-fill-mode:forwards;
+            animation: fader 3s linear 1;
+            text-align: center;
+        }
+
+        @keyframes fader {
+            0% {opacity:0;}
+            15%{opacity:0.8;}
+            85% {opacity:0.8;}
+            100% {opacity:0;}
+        }
+        .info button{
+            position:relative;
+            margin-right:3%;
+            float: right;
+            width:20px;
+            background-color: transparent;
+            border:0;
+            font-size:20px;
+            color:white;
+            bottom:25%;
+        }
+    </style>
+</head>
+<body class =background>
+<nav>
+    <h1 class="title animated_text">Maciek's item register</h1>
+</nav>
+<table id=maintable>
+
+    <tr class="table_header">
+        <th>Kod wewn.</th>
+        <th>Nazwa badania</th>
+        <th>ICD9</th>
+        <th>Koszt</th>
+        <th>Cena dla pacjenta</th>
+        <th>Częste badanie</th>
+        <th>Akcja</th>
+    </tr>
+    <tr class="table_header">
+        <th><input type="text" id="codefilter" onchange="filter_data_in_main_table()"></th>
+        <td><input type="text" id="namefilter"></td>
+        <th><input type="text" id="icd9filter"></th>
+        <th>Min:<input type="number" id="costminfilter">Max:<input type="number"></th>
+        <th>Min:<input type="number" id="costmaxfilter">Max:<input type="number"></th>
+        <th><input type="checkbox"></th>
+        <th></th>
+    </tr>
+
+</table>
+<div class="side_menu_hide" id="sidemenu">
+    <h2 style="color:antiquewhite">Koszyk</h2>
+    <div onclick="toggle_sidemenu_visibility()" style="height: 80%; width: 4%;horiz-align: left; top:0;background: rgba(138,138,138,0.72);
+border-bottom-right-radius: 15px; border-top-right-radius: 15px; vertical-align: center"></div>
+<div>
+    <table id="cart_table" class="cart_table">
+    </table>
+</div>
+
+</div>
+
+<div class="side_menu_hide" id="sidepackages">
+    <h2 style="color:antiquewhite">Zestawy</h2>
+    <div onclick="toggle_sidemenu_visibility('sidepackages')" style="height: 80%; width: 4%;horiz-align: left; top:0;background: rgba(138,138,138,0.72);
+border-bottom-right-radius: 15px; border-top-right-radius: 15px; vertical-align: center"></div>
+    <div class="centered">
+        <table id="package_table" class="cart_table">
+        </table>
+        <button class="color_btn centerme" >Dodaj nową paczkę</button>
+
+    </div>
+
+</div>
+
+<button class="color_btn upload_file_button" onclick="click_file_input()">Załaduj nowe dane</button>
+<button class="color_btn cart_file_button" onclick="toggle_sidemenu_visibility()">Pokaż koszyk</button>
+<button class="color_btn packages_button" onclick="toggle_sidemenu_visibility('sidepackages')">Pokaż paczki</button>
+<input style="display: none" type="file" id = "uploadfile" onchange="load_new_file_into_storage(this)">
+
+<script>
+    let table = document.getElementById("maintable");
+    let columns = ["kod","nazwa","icd9","koszt","cena","czestebadanie"];
+    let data_source=[];
+    var cart=[]
+    var saved_packages=[]
+
+initial_upload_from_storage_to_source()
+
+function initial_upload_from_storage_to_source(){
+    let storage = localStorage.getItem("data")
+    let packages = localStorage.getItem("packages")
+    if (storage!==undefined){
+        let rows = storage.split("###row###")
+        for (let row=0;row<rows.length;row++) {
+            //let row_element = document.createElement("tr")
+            let temp_item={}
+            let tds =rows[row].split(";");
+            for (let td =0;td<tds.length;td++) {
+                if (td===3||td===4){
+                    //special treatment for numericals
+                    temp_item[columns[td]] = parseFloat(tds[td])
+                }else {
+                    temp_item[columns[td]] = tds[td]
+                }
+
+            }
+            data_source.push(temp_item)
+        }
+    }
+
+    if (packages !==undefined){
+        let rows = storage.split("###row###")
+        for (let row=0;row<rows.length;row++) {
+            //let row_element = document.createElement("tr")
+            let temp_item={}
+            let tds =rows[row].split(";");
+            for (let td =0;td<tds.length;td++) {
+                temp_item[columns[td]]=tds[td]
+
+            }
+            saved_packages.push(temp_item)
+        }
+    }
+}
+
+function load_new_file_into_storage(origin) {
+    const reader = new FileReader();
+    let file = origin.files[0]
+
+    reader.onload = function () {
+        const content = reader.result;
+        //dropping old rows
+        localStorage.setItem("data","")
+        data_source=[]
+        let storage_string=""
+        //adding new ones
+        let rows = content.split("\n")
+        for (let row=1;row<rows.length;row++) {
+            let temp_item={}
+            let tds =rows[row].split(";");
+            //console.log(">>>"+tds.length+"<<<")
+            if(tds.length<6){
+                continue;
+            }
+            for (let td =0;td<tds.length;td++) {
+                if (td===3||td===4){
+                    //Special treatment for numericals
+                    temp_item[columns[td]] = parseFloat(tds[td])
+                }else {
+                    temp_item[columns[td]] = tds[td]
+                }
+                storage_string+=tds[td]+";"
+            }
+            data_source.push(temp_item)
+            storage_string = storage_string.slice(0, -1)+"###row###";
+        }
+        storage_string = storage_string.slice(0, -9).replaceAll("\r","");
+        console.log(storage_string)
+        localStorage.setItem("data",storage_string)
+        console.log(storage_string)
+        load_data_into_ui()
+        alert("File loaded!");
+    };
+
+    reader.onerror = function () {
+        alert("Issue while reading the file")
+
+    };
+
+    reader.readAsText(file, 'utf-8');
+
+}
+
+
+function drop_records_from_ui(){
+    let to_drop_rows = document.getElementsByTagName("tr");
+    for (let count=to_drop_rows.length-1;count>1;count--){
+
+        to_drop_rows[count].remove();
+    }
+
+}
+
+function update_cart_in_ui(){
+    let cart_table = document.getElementById("cart_table");
+    cart_table.innerHTML="<tr><th>Nazwa</th><th>Koszt</th><th>Usuń</th></tr>"
+    let total_cost=0;
+    let tr,td1,td2,td3,delbtn
+
+    for (let cart_item of cart){
+        if (cart_item===undefined){
+            continue
+        }
+        tr = document.createElement("tr")
+        td1 = Object.assign(document.createElement("td"),{"innerHTML":cart_item.nazwa})
+        td2 = Object.assign(document.createElement("td"),{"innerHTML":cart_item.koszt})
+        delbtn = Object.assign(document.createElement("button"),{"innerHTML":"usuń"})
+        delbtn.onclick=()=>{
+            tr.remove();
+            for (let del_cart_item=0;del_cart_item<cart.length;del_cart_item++){
+                if (cart[del_cart_item].nazwa === cart_item.nazwa){
+                    delete cart[del_cart_item]
+                    break;
+                }
+            }
+            update_cart_in_ui()
+            show_info("Usunięto "+cart_item.nazwa)
+
+
+        }
+        td3 = document.createElement("td")
+        td3.appendChild(delbtn);
+        tr.appendChild(td1)
+        tr.appendChild(td2)
+        tr.appendChild(td3)
+        cart_table.appendChild(tr);
+        //cart_table.innerHTML+='<tr><td>'+cart_item.nazwa+'</td><td>'+cart_item.koszt+'</td><td><button>usuń</button></td></tr>'
+        console.log(cart_item.koszt)
+
+        total_cost+=parseFloat(cart_item.koszt)
+    }
+
+
+    cart_table.appendChild(document.createElement("br"));
+    cart_table.appendChild(document.createElement("br"));
+
+
+
+
+    //cart_table.appendChild(sum_label)
+    let summary_div = document.createElement("div")
+    let sum_label = Object.assign(document.createElement("label"),{"innerHTML":"Suma: "+total_cost+"zł"})
+    sum_label.style.fontSize="22px"
+    summary_div.appendChild(sum_label);
+    summary_div.appendChild(document.createElement("br"))
+    summary_div.appendChild(document.createElement("br"))
+    summary_div.style.width="150%";
+    summary_div.style.marginLeft="5%"
+    summary_div.style.marginRight="5%"
+
+    summary_div.appendChild(Object.assign(document.createElement("label"),{"innerHTML":"Imię pacjenta"}))
+    summary_div.appendChild(Object.assign(document.createElement("input"),{"type":"text"}))
+
+    summary_div.appendChild(document.createElement("br"));
+    summary_div.appendChild(document.createElement("br"));
+
+    summary_div.appendChild(Object.assign(document.createElement("button"),{"innerHTML":"Podsumuj"}))
+
+    cart_table.appendChild(summary_div)
+    //add sum and pacient data
+
+
+}
+
+function load_data_into_ui(filtered_data=null){
+    //Dropping old records
+    drop_records_from_ui()
+    let data = filtered_data===null?data_source:filtered_data;
+    //Loading new records
+    for(let record of data){
+        let row = document.createElement("tr");
+        for (const [key, value] of Object.entries(record)) {
+            row.appendChild(Object.assign(document.createElement("td"),{"innerHTML":value}))
+        }
+        if(row.innerHTML!=="") {
+            //let check_td = document.createElement("td")
+            //check_td.appendChild(Object.assign(document.createElement("labe"), {"type": "checkbox"}))
+            let action_td = document.createElement("td")
+            let add_btn = Object.assign(document.createElement("button"), {"innerHTML": "Dodaj do koszyka"})
+            add_btn.classList.add("color_btn")
+            add_btn.onclick=()=>{
+                let elems = row.children;
+                let count=0;
+                let values =[];
+
+                for (const [key, value] of Object.entries(record)) {
+                    values[key] = elems[count].innerHTML;
+                    count++;
+                }
+
+                cart.push(values)
+                update_cart_in_ui()
+
+                show_info("Dodano "+values.nazwa)
+
+
+            }
+            action_td.appendChild(add_btn);
+            //row.appendChild(check_td)
+            row.appendChild(action_td)
+            table.appendChild(row);
+        }
+    }
+}
+        //console.log(localStorage.getItem("data"))
+        //localStorage.setItem("data","Wooo")
+
+function click_file_input(){
+    document.getElementById("uploadfile").click();
+}
+
+
+function toggle_sidemenu_visibility(source="sidemenu"){
+        console.log(source)
+    let sidemenu = document.getElementById(source)
+    console.log(sidemenu)
+    if (sidemenu.classList.contains("side_menu_hide")){
+        sidemenu.classList.remove("side_menu_hide");
+        sidemenu.classList.add("side_menu_show")
+    }else{
+        sidemenu.classList.remove("side_menu_show");
+        sidemenu.classList.add("side_menu_hide")
+    }
+}
+
+function show_info(message){
+    let div = document.createElement("div");
+    div.classList.add("info");
+    //div.classList.add("alert_type_"+alert_type);
+
+
+    let title = Object.assign(document.createElement("strong"), {"innerHTML": "Info:"});
+
+    div.appendChild(title);
+    div.innerHTML += "   "+message;
+
+    let btnx = Object.assign(document.createElement("button"), {"innerHTML": "X"});
+    div.appendChild(btnx);
+
+    btnx.onclick=()=>{
+        div.remove();
+    }
+
+    document.getElementsByTagName("body")[0].appendChild(div);
+
+    div.addEventListener('animationend', () => {
+        div.remove();
+    });
+
+}
+
+function filter_data_in_main_table(){
+        //todo
+
+    let filter_data = data_source
+
+    //Filter by code
+    let codefilter = document.getElementById("codefilter").value
+    filter_data = filter_data.filter((x)=>{return x.kod.includes(codefilter)})
+
+
+    //Filter by name
+    let namefilter = document.getElementById("namefilter").value
+    filter_data = filter_data.filter((x)=>{return x.nazwa.includes(namefilter)})
+
+    //Filter by icd9
+    let icd9filter = document.getElementById("icd9filter").value
+    filter_data = filter_data.filter((x)=>{return x.icd9.includes(icd9filter)})
+
+    //costminfilter
+    //costmaxfilter
+    console.log(filter_data)
+}
+
+//Initial data upload
+load_data_into_ui()
+
+
+</script>
+</body>
+</html>
