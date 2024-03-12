@@ -92,7 +92,7 @@
             font-weight: 0;
             font-size: 14px;
             color: #fff;
-            background: linear-gradient(90deg, #0066CC 0%, #c500cc 100%);
+            background: linear-gradient(90deg, #0066CC 0%, #c500cc,#0066CC 100%);
             padding: 10px 30px;
             border: 2px solid #0066cc;
             box-shadow: rgb(0, 0, 0) 0px 0px 0px 0px;
@@ -102,24 +102,27 @@
             flex-direction: row;
             align-items: center;
             cursor: pointer;
-            transition: 10s linear;
+            transition: 3s;
+            animation-fill-mode: forwards;
         }
 
         .color_btn:hover{
-
+            transition: 3s;
             /*padding: 10px 40px;*/
-
+            animation-fill-mode: forwards;
             transform : translateY(-0px);
-            /*background: linear-gradient(90deg, #c500cc 0%, #0066cc 100%); */
+            /*background: linear-gradient(90deg, #0066cc 0%,#c500cc 100%);
             color: #e1e1e1;
             border: solid 2px #0066cc;
-            background-position:1000px;
+            /*background-position:2rem;*/
             animation: loop_button_background 3s infinite ease-in-out;
         }
 
         @keyframes loop_button_background{
             0%{background-position-x:0}
-            50%{background-position-x: 250px}
+            50%{background-position-x: 8rem;
+
+            }
             100%{background-position-x:0}
         }
 
@@ -249,11 +252,13 @@
     </tr>
     <tr class="table_header">
         <th><input type="text" id="codefilter" onchange="filter_data_in_main_table()"></th>
-        <td><input type="text" id="namefilter"></td>
-        <th><input type="text" id="icd9filter"></th>
-        <th>Min:<input type="number" id="costminfilter">Max:<input type="number"></th>
-        <th>Min:<input type="number" id="costmaxfilter">Max:<input type="number"></th>
-        <th><input type="checkbox"></th>
+        <td><input type="text" id="namefilter" onchange="filter_data_in_main_table()"></td>
+        <th><input type="text" id="icd9filter" onchange="filter_data_in_main_table()"></th>
+        <th>Min:<input type="number" id="costminfilter" onchange="filter_data_in_main_table()">
+            Max:<input type="number" id="costmaxfilter" onchange="filter_data_in_main_table()"></th>
+        <th>Min:<input type="number" id="patientcostminfilter" onchange="filter_data_in_main_table()">
+            Max:<input type="number" id="patientcostmaxfilter" onchange="filter_data_in_main_table()"></th>
+        <th><input type="checkbox" id="frequentexamination" onchange="filter_data_in_main_table()"></th>
         <th></th>
     </tr>
 
@@ -455,7 +460,16 @@ function update_cart_in_ui(){
     summary_div.appendChild(document.createElement("br"));
 
     summary_div.appendChild(Object.assign(document.createElement("button"),{"innerHTML":"Podsumuj"}))
+    let printbtn = Object.assign(document.createElement("button"),{"innerHTML":"Wydrukuj"})
+    printbtn.onclick=()=>{
+        let main = document.createElement("iframe");
+        //todo fill this frame for print purposes
 
+
+    }
+
+
+    summary_div.appendChild(printbtn)
     cart_table.appendChild(summary_div)
     //add sum and pacient data
 
@@ -567,9 +581,53 @@ function filter_data_in_main_table(){
     let icd9filter = document.getElementById("icd9filter").value
     filter_data = filter_data.filter((x)=>{return x.icd9.includes(icd9filter)})
 
-    //costminfilter
-    //costmaxfilter
+
+    //Filter by min cost
+    let costminfilter = document.getElementById("costminfilter").value;
+    if (costminfilter!==''){
+
+        filter_data=filter_data.filter((x)=>{return x.koszt>costminfilter})
+    }
+    console.log("After minfilter")
     console.log(filter_data)
+    //Filter by max cost
+    let costmaxfilter = document.getElementById("costmaxfilter").value;
+    if (costmaxfilter!==''){
+        filter_data=filter_data.filter((x)=>{return x.koszt<costmaxfilter})
+    }
+    console.log("After maxfilter")
+    console.log(filter_data)
+
+
+    //Filter by min patient cost
+    let patientcostminfilter = document.getElementById("patientcostminfilter").value;
+    if (patientcostminfilter!==''){
+        filter_data=filter_data.filter((x)=>{return x.cena>patientcostminfilter})
+    }
+    console.log("After mpatient min filter")
+    console.log(filter_data)
+
+    //Filter by max patient cost
+    let patientcostmaxfilter = document.getElementById("patientcostmaxfilter").value;
+    if (patientcostmaxfilter!==''){
+        filter_data=filter_data.filter((x)=>{return x.cena<patientcostmaxfilter})
+    }
+    console.log("After patient max filter")
+    console.log(filter_data)
+    //Filter by frequent examination
+    let frequentexaminationfilter = document.getElementById("frequentexamination").checked
+    if (frequentexaminationfilter) {
+
+        filter_data = filter_data.filter((x) => {
+            return x.czestebadanie !== ''
+        })
+    }
+
+    console.log("After frequent")
+    console.log(filter_data)
+    console.log(filter_data)
+    load_data_into_ui(filter_data)
+
 }
 
 //Initial data upload
