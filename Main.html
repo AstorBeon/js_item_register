@@ -145,14 +145,16 @@
         }
 
         .side_menu_hide *{
-
             animation: fadeaway 1s ;
+            display: none;
+        }
 
+        .side_menu_hide >*{
+            animation: fadeaway 1s ;
         }
 
         .side_menu_show *{
             animation: fadein 1s;
-
         }
 
         @keyframes fadeaway{
@@ -275,7 +277,7 @@ border-bottom-right-radius: 15px; border-top-right-radius: 15px; vertical-align:
 </div>
 
 <div class="side_menu_hide" id="sidepackages">
-    <h2 style="color:antiquewhite">Zestawy</h2>
+    <h2 style="color:antiquewhite" >Zestawy</h2>
     <div onclick="toggle_sidemenu_visibility('sidepackages')" style="height: 80%; width: 4%;horiz-align: left; top:0;background: rgba(138,138,138,0.72);
 border-bottom-right-radius: 15px; border-top-right-radius: 15px; vertical-align: center"></div>
     <div class="centered">
@@ -462,8 +464,18 @@ function update_cart_in_ui(){
     summary_div.appendChild(Object.assign(document.createElement("button"),{"innerHTML":"Podsumuj"}))
     let printbtn = Object.assign(document.createElement("button"),{"innerHTML":"Wydrukuj"})
     printbtn.onclick=()=>{
-        let main = document.createElement("iframe");
+        let main = Object.assign(document.createElement("iframe"),{"id":"printframe","name":"printframe"});
+        let content = Object.assign(document.createElement("label"),{"innerHTML":"Your cntents for printing"})
+        content.style.color="black"
+        console.log(main)
+        document.getElementById("printframe").contentWindow.document.appendChild(content)
         //todo fill this frame for print purposes
+        document.getElementsByTagName("body")[0].appendChild(main)
+        console.log(window.frames["printframe"])
+        document.getElementById("printframe").contentWindow.focus()
+        document.getElementById("printframe").contentWindow.print()
+        // window.frames["printframe"].focus()
+        // window.frames["printframe"].print()
 
 
     }
