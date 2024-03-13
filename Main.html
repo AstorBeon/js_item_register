@@ -293,7 +293,7 @@ border-bottom-right-radius: 15px; border-top-right-radius: 15px; vertical-align:
 <button class="color_btn cart_file_button" onclick="toggle_sidemenu_visibility()">Pokaż koszyk</button>
 <button class="color_btn packages_button" onclick="toggle_sidemenu_visibility('sidepackages')">Pokaż paczki</button>
 <input style="display: none" type="file" id = "uploadfile" onchange="load_new_file_into_storage(this)">
-
+<iframe id=printframe" name="printframe" style="visibility: hidden"></iframe>
 <script>
     let table = document.getElementById("maintable");
     let columns = ["kod","nazwa","icd9","koszt","cena","czestebadanie"];
@@ -400,9 +400,10 @@ function drop_records_from_ui(){
 
 function update_cart_in_ui(){
     let cart_table = document.getElementById("cart_table");
-    cart_table.innerHTML="<tr><th>Nazwa</th><th>Koszt</th><th>Usuń</th></tr>"
+    cart_table.innerHTML="<tr><th>Nazwa</th><th>Koszt</th><th>Cena</th><th>Usuń</th></tr>"
     let total_cost=0;
-    let tr,td1,td2,td3,delbtn
+    let total_price=0;
+    let tr,td1,td2,td3,td4,delbtn
 
     for (let cart_item of cart){
         if (cart_item===undefined){
@@ -411,12 +412,14 @@ function update_cart_in_ui(){
         tr = document.createElement("tr")
         td1 = Object.assign(document.createElement("td"),{"innerHTML":cart_item.nazwa})
         td2 = Object.assign(document.createElement("td"),{"innerHTML":cart_item.koszt})
+        td3 = Object.assign(document.createElement("td"),{"innerHTML":cart_item.cena})
         delbtn = Object.assign(document.createElement("button"),{"innerHTML":"usuń"})
         delbtn.onclick=()=>{
             tr.remove();
             for (let del_cart_item=0;del_cart_item<cart.length;del_cart_item++){
                 if (cart[del_cart_item].nazwa === cart_item.nazwa){
                     delete cart[del_cart_item]
+                    cart = cart.filter((x)=>{return x!== undefined})
                     break;
                 }
             }
@@ -425,16 +428,18 @@ function update_cart_in_ui(){
 
 
         }
-        td3 = document.createElement("td")
-        td3.appendChild(delbtn);
+        td4 = document.createElement("td")
+        td4.appendChild(delbtn);
         tr.appendChild(td1)
         tr.appendChild(td2)
         tr.appendChild(td3)
+        tr.appendChild(td4)
         cart_table.appendChild(tr);
         //cart_table.innerHTML+='<tr><td>'+cart_item.nazwa+'</td><td>'+cart_item.koszt+'</td><td><button>usuń</button></td></tr>'
         console.log(cart_item.koszt)
 
         total_cost+=parseFloat(cart_item.koszt)
+        total_price+=parseFloat(cart_item.cena)
     }
 
 
@@ -446,9 +451,13 @@ function update_cart_in_ui(){
 
     //cart_table.appendChild(sum_label)
     let summary_div = document.createElement("div")
-    let sum_label = Object.assign(document.createElement("label"),{"innerHTML":"Suma: "+total_cost+"zł"})
-    sum_label.style.fontSize="22px"
-    summary_div.appendChild(sum_label);
+    let sum_cost_label = Object.assign(document.createElement("label"),{"id":"totalcost","innerHTML":"Suma koszt: "+total_cost+"zł"})
+    let sum_price_label = Object.assign(document.createElement("label"),{"id":"totalprice","innerHTML":"Suma cena: "+total_price+"zł"})
+    sum_cost_label.style.fontSize="22px"
+    sum_price_label.style.fontSize="22px"
+    summary_div.appendChild(sum_cost_label);
+    summary_div.appendChild(document.createElement("br"))
+    summary_div.appendChild(sum_price_label);
     summary_div.appendChild(document.createElement("br"))
     summary_div.appendChild(document.createElement("br"))
     summary_div.style.width="150%";
@@ -464,16 +473,26 @@ function update_cart_in_ui(){
     summary_div.appendChild(Object.assign(document.createElement("button"),{"innerHTML":"Podsumuj"}))
     let printbtn = Object.assign(document.createElement("button"),{"innerHTML":"Wydrukuj"})
     printbtn.onclick=()=>{
-        let main = Object.assign(document.createElement("iframe"),{"id":"printframe","name":"printframe"});
-        let content = Object.assign(document.createElement("label"),{"innerHTML":"Your cntents for printing"})
-        content.style.color="black"
-        console.log(main)
-        document.getElementById("printframe").contentWindow.document.appendChild(content)
+        //let main = Object.assign(document.createElement("iframe"),{"id":"printframe","name":"printframe"});
+        //let content = Object.assign(document.createElement("label"),{"innerHTML":"Your cntents for printing"})
+        //content.style.color="black"
+        //console.log(main)
+        let iframe_cont = window.frames["printframe"]
+
+        console.log(iframe_cont)
+        iframe_cont.focus()
+        //console.log(window.frames["printframe"])
+        iframe_cont.document.open();
+        iframe_cont.document.write(generate_string_for_printing());
+
+        iframe_cont.document.close();
+        //iframe_cont.srcdoc="<h1> Hey there</h1>"
+        iframe_cont.print()
         //todo fill this frame for print purposes
-        document.getElementsByTagName("body")[0].appendChild(main)
-        console.log(window.frames["printframe"])
-        document.getElementById("printframe").contentWindow.focus()
-        document.getElementById("printframe").contentWindow.print()
+        //document.getElementsByTagName("body")[0].appendChild(main)
+        //console.log(window.frames["printframe"])
+        //document.getElementById("printframe").contentWindow.focus()
+        //document.getElementById("printframe").contentWindow.print()
         // window.frames["printframe"].focus()
         // window.frames["printframe"].print()
 
@@ -484,8 +503,22 @@ function update_cart_in_ui(){
     summary_div.appendChild(printbtn)
     cart_table.appendChild(summary_div)
     //add sum and pacient data
+}
 
+function generate_string_for_printing(){
+        let contents="<div style='text-align: center'><h1>Maciek's item register</h1><br><br>" +
+            "<h2>Usługi:</h2><table style='width: 70%;margin-left: auto;margin-right: auto;'><tr><th>Nazwa</th><th>Koszt</th><th>Cena dla pacjenta</th></tr>"
 
+        for (let item of cart){
+            contents+="<tr><td style='text-align: center'>"+item.nazwa +"</td><td style='text-align: center'>"+ item.koszt+ "zł</td><td style='text-align: center'>"+item.cena +"zł</td></tr>"
+        }
+        let total_cost = cart.reduce((total,elem)=>{return total+elem.cost});
+        let total_price = cart.reduce((total,elem)=>{return total+elem.price});
+        contents+="<tr><td style='text-align: center'></td><td style='text-align: center'>"+ total_cost+ "zł</td><td style='text-align: center'>"+total_price +"zł</td></tr>"
+        contents +="</table>"
+
+    contents+="</div>"
+    return contents
 }
 
 function load_data_into_ui(filtered_data=null){
@@ -600,15 +633,12 @@ function filter_data_in_main_table(){
 
         filter_data=filter_data.filter((x)=>{return x.koszt>costminfilter})
     }
-    console.log("After minfilter")
-    console.log(filter_data)
+
     //Filter by max cost
     let costmaxfilter = document.getElementById("costmaxfilter").value;
     if (costmaxfilter!==''){
         filter_data=filter_data.filter((x)=>{return x.koszt<costmaxfilter})
     }
-    console.log("After maxfilter")
-    console.log(filter_data)
 
 
     //Filter by min patient cost
@@ -616,16 +646,13 @@ function filter_data_in_main_table(){
     if (patientcostminfilter!==''){
         filter_data=filter_data.filter((x)=>{return x.cena>patientcostminfilter})
     }
-    console.log("After mpatient min filter")
-    console.log(filter_data)
 
     //Filter by max patient cost
     let patientcostmaxfilter = document.getElementById("patientcostmaxfilter").value;
     if (patientcostmaxfilter!==''){
         filter_data=filter_data.filter((x)=>{return x.cena<patientcostmaxfilter})
     }
-    console.log("After patient max filter")
-    console.log(filter_data)
+
     //Filter by frequent examination
     let frequentexaminationfilter = document.getElementById("frequentexamination").checked
     if (frequentexaminationfilter) {
@@ -635,9 +662,6 @@ function filter_data_in_main_table(){
         })
     }
 
-    console.log("After frequent")
-    console.log(filter_data)
-    console.log(filter_data)
     load_data_into_ui(filter_data)
 
 }
