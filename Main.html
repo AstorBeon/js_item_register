@@ -512,9 +512,11 @@ function generate_string_for_printing(){
         for (let item of cart){
             contents+="<tr><td style='text-align: center'>"+item.nazwa +"</td><td style='text-align: center'>"+ item.koszt+ "zł</td><td style='text-align: center'>"+item.cena +"zł</td></tr>"
         }
-        let total_cost = cart.reduce((total,elem)=>{return total+elem.cost});
-        let total_price = cart.reduce((total,elem)=>{return total+elem.price});
-        contents+="<tr><td style='text-align: center'></td><td style='text-align: center'>"+ total_cost+ "zł</td><td style='text-align: center'>"+total_price +"zł</td></tr>"
+        let total_cost = cart.map((x)=>{return parseFloat(x["koszt"])}).reduce((total,elem)=>{return total+elem});
+        let total_price = cart.map((x)=>{return parseFloat(x["cena"])}).reduce((total,elem)=>{return total+elem});
+
+        contents+="<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>" +
+            "<tr><td style='text-align: center; font-size: 1.2rem;'><b>Suma</b></td><td style='text-align: center; font-size: 1.2rem;'><b>"+ total_cost+ "zł</b></td><td style='text-align: center; font-size: 1.2rem;'><b>"+total_price +"zł</b></td></tr>"
         contents +="</table>"
 
     contents+="</div>"
